@@ -74,6 +74,7 @@ class ViewController: UIViewController {
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitleColor(.black, for: .normal)
         btn.setTitle("가져오기", for: .normal)
+        btn.addTarget(self, action: #selector(loadBtnClick(_:)), for: .touchUpInside)
         return btn
     }()
     
@@ -161,6 +162,25 @@ class ViewController: UIViewController {
             self.cityTF.widthAnchor.constraint(equalTo: self.searchStackView.widthAnchor, multiplier: 1, constant: -80),
             self.cityTF.heightAnchor.constraint(equalTo: self.searchStackView.heightAnchor),
         ])
+    }
+    
+    @objc private func loadBtnClick(_ sedner:Any){
+        if let cityName = self.cityTF.text {
+            self.getWeather(name: cityName)
+            self.view.endEditing(true)
+        }
+    }
+    
+    func getWeather(name:String){
+        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(name)&appid=073d4d074a5e3dd848893f173bd9c676") else {return}
+        let session = URLSession(configuration: .default)
+        session.dataTask(with: url){ data, response, error in
+            guard let data = data, error == nil else{return}
+            
+            let decoder = JSONDecoder()
+            let weatherInfo = try? decoder.decode(WeatherInfo.self, from: data)
+            print(weatherInfo)
+        }.resume()
     }
 }
 
