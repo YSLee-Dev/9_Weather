@@ -13,7 +13,7 @@ class ViewController: UIViewController {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.placeholder = "도시를 영문으로 입력해주세요."
+        tf.placeholder = "ONLY ENGLISH"
         return tf
     }()
     
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 25)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "서울"
+        label.text = "CITY"
         label.textColor = .white
         label.backgroundColor = .black
         label.textAlignment = .center
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 25)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "맑음"
+        label.text = "-"
         return label
     }()
     
@@ -40,7 +40,7 @@ class ViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 25)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "10도"
+        label.text = "-"
         return label
     }()
     
@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .gray
-        label.text = "11도"
+        label.text = "INSERT"
         return label
     }()
     
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .gray
-        label.text = "9도"
+        label.text = "CITY"
         return label
     }()
     
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitleColor(.black, for: .normal)
-        btn.setTitle("가져오기", for: .normal)
+        btn.setTitle("LOAD", for: .normal)
         btn.addTarget(self, action: #selector(loadBtnClick(_:)), for: .touchUpInside)
         return btn
     }()
@@ -174,13 +174,54 @@ class ViewController: UIViewController {
     func getWeather(name:String){
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(name)&appid=073d4d074a5e3dd848893f173bd9c676") else {return}
         let session = URLSession(configuration: .default)
-        session.dataTask(with: url){ data, response, error in
-            guard let data = data, error == nil else{return}
+        session.dataTask(with: url){ [weak self] data, response, error in
+            let success = (200..<300)
             
+            guard let data = data, error == nil else{return}
             let decoder = JSONDecoder()
-            let weatherInfo = try? decoder.decode(WeatherInfo.self, from: data)
-            print(weatherInfo)
+            
+            if let response = response as? HTTPURLResponse, success.contains(response.statusCode){
+                guard let weatherInfo = try? decoder.decode(WeatherInfo.self, from: data) else{return}
+                
+                var imgString = ""
+                
+                if let img = weatherInfo.weather.first{
+                    imgString = img.icon
+                }
+                
+                DispatchQueue.main.async {
+                    self?.weatherViewSet(info: weatherInfo)
+                    self?.getImg(imgString: imgString)
+                }
+            }else {
+                guard let errorMessage = try? decoder.decode(ErrorMessage.self, from: data) else {return}
+                DispatchQueue.main.async {
+                    self?.showAlert(message: errorMessage.message)
+                    self?.cityLabel.text = "ERROR"
+                }
+            }
+            
         }.resume()
+    }
+    
+    func getImg(imgString:String){
+        
+    }
+    
+    func showAlert(message:String){
+        let alert = UIAlertController(title: "ERROR", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
+    }
+    
+    func weatherViewSet(info:WeatherInfo){
+        self.cityLabel.text = info.name
+        if let weather = info.weather.first{
+            self.conditionLabel.text = weather.main
+        }
+        self.temLabel.text = "\(Int(info.temp.temp - 273.15))°C"
+        self.highTemLabel.text = "\(Int(info.temp.maxTemp - 273.15))°C"
+        self.lowTemLabel.text = "\(Int(info.temp.minTemp - 273.15))°C"
     }
 }
 

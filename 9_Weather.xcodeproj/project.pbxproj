@@ -14,6 +14,7 @@
 		D475951C27B11D8600DCE2EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D475951B27B11D8600DCE2EE /* Assets.xcassets */; };
 		D475951F27B11D8600DCE2EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D475951D27B11D8600DCE2EE /* LaunchScreen.storyboard */; };
 		D475952927BBA7DA00DCE2EE /* WeatherInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D475952827BBA7DA00DCE2EE /* WeatherInfo.swift */; };
+		D4C92C6327C3958500F3A82A /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C92C6227C3958500F3A82A /* ErrorMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D475951E27B11D8600DCE2EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D475952027B11D8600DCE2EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D475952827BBA7DA00DCE2EE /* WeatherInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherInfo.swift; sourceTree = "<group>"; };
+		D4C92C6227C3958500F3A82A /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				D475951227B11D8400DCE2EE /* AppDelegate.swift */,
+				D4C92C6227C3958500F3A82A /* ErrorMessage.swift */,
 				D475951427B11D8400DCE2EE /* SceneDelegate.swift */,
 				D475951627B11D8400DCE2EE /* ViewController.swift */,
 				D475952827BBA7DA00DCE2EE /* WeatherInfo.swift */,
@@ -143,6 +146,7 @@
 			files = (
 				D475952927BBA7DA00DCE2EE /* WeatherInfo.swift in Sources */,
 				D475951727B11D8400DCE2EE /* ViewController.swift in Sources */,
+				D4C92C6327C3958500F3A82A /* ErrorMessage.swift in Sources */,
 				D475951327B11D8400DCE2EE /* AppDelegate.swift in Sources */,
 				D475951527B11D8400DCE2EE /* SceneDelegate.swift in Sources */,
 			);
