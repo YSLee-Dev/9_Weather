@@ -198,6 +198,11 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async {
                     self?.showAlert(message: errorMessage.message)
                     self?.cityLabel.text = "ERROR"
+                    self?.highTemLabel.text = "INSERT"
+                    self?.lowTemLabel.text = "CITY"
+                    self?.weatherImg.image = nil
+                    self?.conditionLabel.text = "-"
+                    self?.temLabel.text = "-"
                 }
             }
             
@@ -205,7 +210,13 @@ class ViewController: UIViewController {
     }
     
     func getImg(imgString:String){
-        
+        guard let url = URL(string: "http://openweathermap.org/img/w/\(imgString).png") else{return}
+        let session = URLSession(configuration: .default)
+        session.dataTask(with: url){[weak self] data, response, error in
+            DispatchQueue.main.async {
+                self?.weatherImg.image = UIImage(data: data!)
+            }
+        }.resume()
     }
     
     func showAlert(message:String){
@@ -215,7 +226,7 @@ class ViewController: UIViewController {
     }
     
     func weatherViewSet(info:WeatherInfo){
-        self.cityLabel.text = info.name
+        self.cityLabel.text = info.name.uppercased()
         if let weather = info.weather.first{
             self.conditionLabel.text = weather.main
         }
@@ -224,4 +235,3 @@ class ViewController: UIViewController {
         self.lowTemLabel.text = "\(Int(info.temp.minTemp - 273.15))°C"
     }
 }
-
